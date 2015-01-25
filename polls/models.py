@@ -20,10 +20,22 @@ class Poll(models.Model):
     was_published_recently.short_description = 'Published recently?'
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.CharField(max_length=200)
+
+    def __unicode__(self):  # Python 3: def __str__(self):
+        return self.name
+
+
 class Choice(models.Model):
     poll = models.ForeignKey(Poll)
+    category = models.ForeignKey(Category)
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)
 
     def __unicode__(self):  # Python 3: def __str__(self):
         return self.choice_text
+
+    class Meta:
+        unique_together = ["poll", "category"]
